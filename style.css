@@ -17,7 +17,7 @@ h1 {
     margin-bottom: 30px; /* Khoảng cách dưới tiêu đề */
     font-size: 4em; /* Kích thước chữ lớn hơn */
     font-weight: bold; /* Chữ in đậm */
-    text-shadow: 
+    text-shadow:
         -2px -2px 0 #FFF, /* Viền chữ màu trắng */
         2px -2px 0 #FFF,
         -2px 2px 0 #FFF,
@@ -25,7 +25,7 @@ h1 {
         4px 4px 0px rgba(255, 105, 180, 0.6), /* Đổ bóng màu hồng nhẹ */
         6px 6px 0px rgba(255, 99, 71, 0.6); /* Đổ bóng màu cam nhẹ hơn */
     letter-spacing: 2px; /* Khoảng cách giữa các chữ */
-    animation: 
+    animation:
         pulseColor 3s infinite alternate, /* Hiệu ứng đổi màu đổ bóng */
         shakeTitle 0.8s infinite alternate ease-in-out; /* Hiệu ứng rung rinh */
     padding: 10px 20px; /* Thêm padding cho tiêu đề */
@@ -41,21 +41,21 @@ h1 {
 /* Keyframes cho hiệu ứng đổi màu đổ bóng (pulseColor) */
 @keyframes pulseColor {
     0% {
-        text-shadow: 
+        text-shadow:
             -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
-            4px 4px 0px rgba(255, 105, 180, 0.6), 
+            4px 4px 0px rgba(255, 105, 180, 0.6),
             6px 6px 0px rgba(255, 99, 71, 0.6);
     }
     50% {
-        text-shadow: 
+        text-shadow:
             -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
             4px 4px 0px rgba(135, 206, 250, 0.6), /* Màu xanh nhạt */
             6px 6px 0px rgba(0, 191, 255, 0.6); /* Màu xanh biển */
     }
     100% {
-        text-shadow: 
+        text-shadow:
             -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
-            4px 4px 0px rgba(255, 105, 180, 0.6), 
+            4px 4px 0px rgba(255, 105, 180, 0.6),
             6px 6px 0px rgba(255, 99, 71, 0.6);
     }
 }
@@ -71,7 +71,6 @@ h1 {
 /* Loại bỏ định kiểu cho ảnh tiêu đề nếu không còn sử dụng */
 .header-icon {
     display: none; /* Ẩn hoàn toàn nếu bạn không muốn dùng ảnh */
-    /* Hoặc bạn có thể xóa toàn bộ khối CSS này nếu bạn đã xóa thẻ <img> trong HTML */
 }
 
 .gift-container {
@@ -127,10 +126,10 @@ h1 {
     transform: scale(1.5); /* Phóng to túi được chọn */
     z-index: 10; /* Đảm bảo túi được chọn nằm trên cùng */
     transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
-    height: auto; 
-    max-height: 80vh; 
-    overflow-y: auto; 
-    
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+
     /* Di chuyển túi ra giữa màn hình */
     position: fixed; /* Rút túi ra khỏi dòng chảy tài liệu */
     top: 50%;
@@ -139,8 +138,12 @@ h1 {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Bóng đổ rõ hơn */
     display: flex; /* Đảm bảo là flex container */
     flex-direction: column; /* Xếp các phần tử theo cột */
-    justify-content: center; /* Căn giữa nội dung theo chiều dọc */
-    align-items: center; /* Căn giữa nội dung theo chiều ngang */
+    
+    /* Bắt đầu nội dung từ trên cùng */
+    justify-content: flex-start; /* THAY ĐỔI Ở ĐÂY: Đưa nội dung lên phía trên */
+    align-items: center; /* Vẫn căn giữa theo chiều ngang */
+
+    padding: 15px; /* THAY ĐỔI Ở ĐÂY: Tăng padding để có khoảng trống hợp lý xung quanh nội dung */
 }
 
 .gift-bag.hidden {
@@ -171,7 +174,7 @@ h1 {
 }
 
 /* Chỉnh ô nhập chữ rộng hơn và tự động xuống dòng (sử dụng textarea thay vì input text) */
-.gift-bag textarea { 
+.gift-bag textarea {
     width: 95%;
     height: 100px;
     padding: 8px;
@@ -197,17 +200,17 @@ h1 {
     word-wrap: break-word;
     white-space: pre-wrap;
     display: flex; /* Dùng flexbox để căn giữa nội dung */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: flex-start; /* THAY ĐỔI Ở ĐÂY: Căn nội dung lên trên */
+    justify-content: center; /* Vẫn căn giữa theo chiều ngang */
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    height: auto; 
-    min-height: 50px; 
+    height: auto;
+    min-height: 50px;
 }
 
 .gift-bag.open .content {
     display: flex;
-    max-height: unset; 
-    flex-grow: 1; 
+    max-height: unset;
+    flex-grow: 1;
 }
 
 .gift-bag span.label {
@@ -218,7 +221,7 @@ h1 {
 }
 
 /* Ẩn textarea và label khi đã trộn */
-.gift-bag.shuffled textarea { 
+.gift-bag.shuffled textarea {
     display: none;
 }
 
@@ -253,12 +256,12 @@ h1 {
     background-color: #0056b3;
 }
 
-.controls button#editBtn { 
+.controls button#editBtn {
     background-color: #ffc107;
     color: #333;
 }
 
-.controls button#editBtn:hover { 
+.controls button#editBtn:hover {
     background-color: #e0a800;
 }
 
@@ -280,7 +283,7 @@ h1 {
     .gift-container {
         grid-template-columns: repeat(4, 1fr);
     }
-    .gift-bag { 
+    .gift-bag {
         width: 120px;
         height: 150px;
     }
@@ -298,7 +301,8 @@ h1 {
         font-size: 14px;
     }
     .gift-bag.open {
-        transform: translate(-50%, -50%) scale(1.2); 
+        transform: translate(-50%, -50%) scale(1.2);
+        padding: 10px; /* Điều chỉnh padding cho responsive */
     }
 }
 
@@ -310,14 +314,14 @@ h1 {
     .gift-container {
         grid-template-columns: repeat(3, 1fr);
     }
-    .gift-bag { 
+    .gift-bag {
         width: 100px;
         height: 130px;
     }
     .gift-bag .fa-gift {
         font-size: 35px;
     }
-    .gift-bag textarea { 
+    .gift-bag textarea {
         font-size: 12px;
         padding: 6px;
         height: 60px;
@@ -330,6 +334,7 @@ h1 {
     }
     .gift-bag.open {
         transform: translate(-50%, -50%) scale(1.1);
+        padding: 8px; /* Điều chỉnh padding cho responsive */
     }
 }
 
@@ -341,14 +346,14 @@ h1 {
     .gift-container {
         grid-template-columns: repeat(2, 1fr);
     }
-    .gift-bag { 
+    .gift-bag {
         width: 120px;
         height: 150px;
     }
     .gift-bag .fa-gift {
         font-size: 40px;
     }
-    .gift-bag textarea { 
+    .gift-bag textarea {
         font-size: 14px;
         padding: 8px;
         height: 80px;
@@ -365,5 +370,6 @@ h1 {
     }
     .gift-bag.open {
         transform: translate(-50%, -50%) scale(1.05);
+        padding: 5px; /* Điều chỉnh padding cho responsive */
     }
 }
