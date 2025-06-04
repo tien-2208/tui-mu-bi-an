@@ -37,7 +37,7 @@ function createGiftBag(index, initialData) {
     });
     textarea.addEventListener('input', () => {
         // Cập nhật content vào giftData ngay khi người dùng gõ
-        const bagIndex = parseInt(giftBag.dataset.originalIndex); // Lấy originalIndex để cập nhật đúng vị trí
+        const bagIndex = parseInt(giftBag.dataset.originalIndex);
         if (giftData[bagIndex]) {
             giftData[bagIndex].content = textarea.value;
         }
@@ -45,6 +45,7 @@ function createGiftBag(index, initialData) {
 
     const content = document.createElement('div');
     content.classList.add('content');
+    // content.style.display = 'none'; // Đã xóa - CSS sẽ quản lý display
 
     giftBag.appendChild(label);
     giftBag.appendChild(textarea);
@@ -70,6 +71,7 @@ function createGiftBag(index, initialData) {
 
             // Hiển thị nội dung
             content.textContent = giftBag.dataset.actualContent || 'Trống không!';
+            // content.style.display = 'flex'; // Đã xóa - CSS sẽ quản lý display
 
             playAgainBtn.style.display = 'block';
             shuffleBtn.style.display = 'none';
@@ -123,11 +125,13 @@ function initializeGiftBags(data = []) {
             // Cập nhật textarea và label
             const textarea = giftBag.querySelector('textarea');
             const label = giftBag.querySelector('span.label');
-            const contentDiv = giftBag.querySelector('.content'); // Không cần hiển thị contentDiv ở đây
+            const contentDiv = giftBag.querySelector('.content');
 
             textarea.value = dataItem.content;
             textarea.readOnly = false;
             label.textContent = `${dataItem.originalIndex + 1}`; // Cập nhật số thứ tự
+
+            // contentDiv.style.display = 'none'; // Đã xóa - CSS sẽ quản lý display
 
             // Đặt lại các style position/transform nếu có từ trạng thái 'open'
             giftBag.style.position = '';
@@ -155,13 +159,11 @@ function shuffleArray(array) {
 // Xử lý nút trộn
 shuffleBtn.addEventListener('click', () => {
     // Đảm bảo cập nhật nội dung từ textarea vào giftData trước khi trộn
-    giftBags.forEach((bag) => {
+    giftBags.forEach((bag, index) => {
         const textarea = bag.querySelector('textarea');
         // Sử dụng originalIndex để cập nhật đúng vị trí trong giftData
         const originalIdx = parseInt(bag.dataset.originalIndex);
-        if (giftData[originalIdx]) { // Kiểm tra để tránh lỗi nếu index không tồn tại
-            giftData[originalIdx].content = textarea.value;
-        }
+        giftData[originalIdx].content = textarea.value;
     });
 
     shuffleArray(giftData); // Trộn mảng dữ liệu
@@ -176,11 +178,14 @@ shuffleBtn.addEventListener('click', () => {
 
         // Thêm class 'shuffled' và 'shuffled-yellow'
         bag.classList.add('shuffled', 'shuffled-yellow');
-        // Đảm bảo loại bỏ các màu cũ (pink/black) và trạng thái 'open', 'hidden'
+        // Đảm bảo loại bỏ các màu cũ (pink/black)
         bag.classList.remove('pink', 'black', 'open', 'hidden');
 
         // Vô hiệu hóa textarea
         bag.querySelector('textarea').readOnly = true;
+        // bag.querySelector('textarea').style.display = 'none'; // Đã xóa - CSS quản lý display
+
+        // bag.querySelector('.content').style.display = 'none'; // Đã xóa - CSS quản lý display
 
         // Đặt lại các style position/transform nếu có từ trạng thái 'open'
         bag.style.position = '';
@@ -203,9 +208,11 @@ playAgainBtn.addEventListener('click', () => {
         // Thêm lại màu sắc gốc của túi dựa vào dataset (quan trọng!)
         bag.classList.add(bag.dataset.originalColor);
 
-        // Đảm bảo textarea không bị đọc-ghi
+        // Đảm bảo textarea không bị đọc-ghi và nội dung ẩn đi.
         bag.querySelector('textarea').readOnly = true;
-
+        // bag.querySelector('textarea').style.display = 'none'; // Đã xóa - CSS quản lý display
+        // bag.querySelector('.content').style.display = 'none'; // Đã xóa - CSS quản lý display
+            
         // Reset các style inline
         bag.style.position = '';
         bag.style.left = '';
@@ -251,7 +258,11 @@ editBtn.addEventListener('click', () => {
 
         textarea.value = originalDataItem.content;
         textarea.readOnly = false; // Cho phép chỉnh sửa
+        // textarea.style.display = 'block'; // Đã xóa - CSS quản lý display
         label.textContent = `${originalDataItem.originalIndex + 1}`; // Cập nhật lại số thứ tự
+        // label.style.display = 'block'; // Đã xóa - CSS quản lý display
+
+        // bag.querySelector('.content').style.display = 'none'; // Đã xóa - CSS quản lý display
 
         // Reset các style inline
         bag.style.transform = '';
