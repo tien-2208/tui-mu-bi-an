@@ -29,8 +29,8 @@ h1 {
 }
 
 .gift-bag {
-    width: 120px;
-    height: 150px;
+    width: 140px; /* Chiều rộng túi mù */
+    height: 170px; /* Chiều cao túi mù */
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -40,9 +40,9 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, opacity 0.3s ease;
     position: relative;
-    overflow: hidden; /* Ẩn nội dung tràn ra ngoài */
-    padding: 10px; /* Thêm padding để nội dung không chạm biên */
-    box-sizing: border-box; /* Giữ kích thước tổng thể */
+    overflow: hidden; /* Ẩn nội dung tràn ra ngoài ban đầu */
+    padding: 10px;
+    box-sizing: border-box;
     border: 2px solid rgba(255, 255, 255, 0.5); /* Thêm viền sáng nhẹ cho túi */
 }
 
@@ -67,10 +67,12 @@ h1 {
 }
 
 .gift-bag.open {
-    /* Khi mở, màu sẽ trở lại màu gốc được gán trong JS */
     transform: scale(1.5); /* Phóng to túi được chọn */
     z-index: 10; /* Đảm bảo túi được chọn nằm trên cùng */
     transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
+    height: auto; /* Quan trọng: Cho phép chiều cao tự động điều chỉnh theo nội dung */
+    max-height: 80vh; /* Giới hạn chiều cao tối đa của túi mở để không tràn màn hình */
+    overflow-y: auto; /* Thêm thanh cuộn cho toàn bộ túi nếu nội dung quá dài */
 }
 
 .gift-bag.hidden {
@@ -81,7 +83,7 @@ h1 {
 
 /* Kiểu dáng icon túi quà */
 .gift-bag .fa-gift {
-    font-size: 40px; /* Kích thước icon */
+    font-size: 50px; /* Kích thước icon */
     color: white; /* Màu icon */
     margin-bottom: 5px; /* Khoảng cách dưới icon */
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -103,13 +105,13 @@ h1 {
 /* Chỉnh ô nhập chữ rộng hơn và tự động xuống dòng (sử dụng textarea thay vì input text) */
 .gift-bag textarea { 
     width: 95%; /* Rộng hơn để dễ nhập */
-    height: 90px; /* Tăng chiều cao để nhìn rõ nhiều dòng chữ */
+    height: 100px; /* Tăng chiều cao textarea */
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     text-align: left; /* Chữ căn trái để dễ đọc hơn */
-    font-size: 14px;
+    font-size: 16px; /* Tăng kích thước chữ trong textarea */
     color: #333;
     box-sizing: border-box;
     resize: none; /* Ngăn người dùng kéo dãn textarea */
@@ -120,14 +122,13 @@ h1 {
 
 .gift-bag .content {
     color: #fff;
-    font-size: 16px;
+    font-size: 18px; /* Tăng kích thước chữ nội dung hiển thị */
     font-weight: bold;
     text-align: center; /* Vẫn căn giữa khi hiển thị */
     padding: 5px;
     word-wrap: break-word; /* Tự động ngắt chữ dài */
     white-space: pre-wrap; /* Quan trọng: Giữ định dạng xuống dòng và khoảng trắng */
-    max-height: 120px; /* Tăng giới hạn chiều cao của nội dung để hiển thị nhiều hơn */
-    overflow: auto; /* Thêm scrollbar nếu nội dung quá dài */
+    /* max-height và overflow được xử lý ở .gift-bag.open */
     display: none; /* Ẩn ban đầu, sẽ được JavaScript hiển thị */
     flex-grow: 1; /* Cho phép nội dung chiếm không gian còn lại */
     display: flex; /* Dùng flexbox để căn giữa nội dung */
@@ -137,12 +138,14 @@ h1 {
 }
 
 .gift-bag.open .content {
-    display: flex; /* HIỂN THỊ KHI MỞ */
+    display: flex;
+    height: auto; /* Đảm bảo content không bị giới hạn chiều cao riêng */
+    max-height: unset; /* Xóa bỏ giới hạn chiều cao tối đa của nội dung */
 }
 
 .gift-bag span.label {
     color: #fff;
-    font-size: 14px;
+    font-size: 16px; /* Tăng kích thước chữ label */
     margin-bottom: 5px;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Thêm bóng chữ cho dễ đọc trên nền */
 }
@@ -205,16 +208,51 @@ h1 {
 /* Responsive adjustments */
 @media (max-width: 900px) {
     .gift-container {
-        grid-template-columns: repeat(4, 1fr); /* 4 túi trên 1 hàng */
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .gift-bag { /* Kích thước nhỏ hơn trên màn hình trung bình */
+        width: 120px;
+        height: 150px;
+    }
+    .gift-bag .fa-gift {
+        font-size: 40px;
+    }
+    .gift-bag textarea {
+        height: 90px;
+        font-size: 14px;
+    }
+    .gift-bag .content {
+        font-size: 16px;
+    }
+    .gift-bag span.label {
+        font-size: 14px;
     }
     .gift-bag.open {
-        transform: scale(1.2); /* Phóng to ít hơn trên màn hình nhỏ */
+        transform: scale(1.2);
     }
 }
 
 @media (max-width: 700px) {
     .gift-container {
-        grid-template-columns: repeat(3, 1fr); /* 3 túi trên 1 hàng */
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .gift-bag { /* Kích thước nhỏ hơn nữa trên màn hình nhỏ */
+        width: 100px;
+        height: 130px;
+    }
+    .gift-bag .fa-gift {
+        font-size: 35px;
+    }
+    .gift-bag textarea { 
+        font-size: 12px;
+        padding: 6px;
+        height: 60px;
+    }
+    .gift-bag .content {
+        font-size: 14px;
+    }
+    .gift-bag span.label {
+        font-size: 12px;
     }
     .gift-bag.open {
         transform: scale(1.1);
@@ -223,25 +261,31 @@ h1 {
 
 @media (max-width: 500px) {
     .gift-container {
-        grid-template-columns: repeat(2, 1fr); /* 2 túi trên 1 hàng */
+        grid-template-columns: repeat(2, 1fr);
     }
-    .gift-bag {
-        width: 100px;
-        height: 130px;
+    .gift-bag { /* Kích thước nhỏ nhất trên di động */
+        width: 120px; /* Giữ kích thước tương đối to hơn 1 chút so với trước đây */
+        height: 150px;
+    }
+    .gift-bag .fa-gift {
+        font-size: 40px;
     }
     .gift-bag textarea { 
-        font-size: 12px;
-        padding: 6px;
-        height: 60px; /* Chiều cao nhỏ hơn trên màn hình nhỏ */
+        font-size: 14px;
+        padding: 8px;
+        height: 80px;
     }
     .gift-bag .content {
+        font-size: 16px;
+    }
+    .gift-bag span.label {
         font-size: 14px;
     }
     .controls button {
-        padding: 10px 15px; /* Giảm padding cho nút trên màn hình nhỏ */
+        padding: 10px 15px;
         font-size: 14px;
     }
     .gift-bag.open {
-        transform: scale(1.05); /* Phóng to rất ít */
+        transform: scale(1.05);
     }
 }
