@@ -13,29 +13,65 @@ body {
 }
 
 h1 {
-    color: #333;
-    margin-bottom: 10px; /* Giảm margin-bottom để ảnh gần tiêu đề hơn */
-    display: inline-block; /* Quan trọng để ảnh có thể đứng cạnh h1 */
-    vertical-align: middle; /* Căn giữa theo chiều dọc với ảnh */
+    color: #333; /* Màu chữ chính */
+    margin-bottom: 30px; /* Khoảng cách dưới tiêu đề */
+    font-size: 4em; /* Kích thước chữ lớn hơn */
+    font-weight: bold; /* Chữ in đậm */
+    text-shadow: 
+        -2px -2px 0 #FFF, /* Viền chữ màu trắng */
+        2px -2px 0 #FFF,
+        -2px 2px 0 #FFF,
+        2px 2px 0 #FFF,
+        4px 4px 0px rgba(255, 105, 180, 0.6), /* Đổ bóng màu hồng nhẹ */
+        6px 6px 0px rgba(255, 99, 71, 0.6); /* Đổ bóng màu cam nhẹ hơn */
+    letter-spacing: 2px; /* Khoảng cách giữa các chữ */
+    animation: 
+        pulseColor 3s infinite alternate, /* Hiệu ứng đổi màu đổ bóng */
+        shakeTitle 0.8s infinite alternate ease-in-out; /* Hiệu ứng rung rinh */
+    padding: 10px 20px; /* Thêm padding cho tiêu đề */
+    border-radius: 15px; /* Bo tròn góc */
+    background: linear-gradient(45deg, #FFD1DC, #FF69B4); /* Nền gradient nhẹ cho tiêu đề */
+    -webkit-background-clip: text; /* Tạo nền cho chữ (chỉ hoạt động trên webkit) */
+    -webkit-text-fill-color: transparent; /* Làm trong suốt chữ để thấy nền */
+    color: #333; /* Đặt lại màu chữ dự phòng nếu -webkit- không hoạt động */
+    background-clip: text;
+    text-fill-color: transparent; /* Chuẩn CSS */
 }
 
-/* Định kiểu cho hình ảnh tiêu đề */
-.header-icon {
-    width: 50px; /* Điều chỉnh kích thước ảnh phù hợp */
-    height: auto; /* Giữ tỷ lệ khung hình */
-    margin-left: 10px; /* Khoảng cách giữa chữ và ảnh */
-    vertical-align: middle; /* Căn giữa theo chiều dọc với tiêu đề */
-    animation: bounce 1s infinite alternate; /* Thêm hiệu ứng nhún nhảy nhẹ */
-}
-
-/* Keyframes cho hiệu ứng bounce */
-@keyframes bounce {
+/* Keyframes cho hiệu ứng đổi màu đổ bóng (pulseColor) */
+@keyframes pulseColor {
     0% {
-        transform: translateY(0);
+        text-shadow: 
+            -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
+            4px 4px 0px rgba(255, 105, 180, 0.6), 
+            6px 6px 0px rgba(255, 99, 71, 0.6);
+    }
+    50% {
+        text-shadow: 
+            -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
+            4px 4px 0px rgba(135, 206, 250, 0.6), /* Màu xanh nhạt */
+            6px 6px 0px rgba(0, 191, 255, 0.6); /* Màu xanh biển */
     }
     100% {
-        transform: translateY(-5px); /* Nhún lên 5px */
+        text-shadow: 
+            -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
+            4px 4px 0px rgba(255, 105, 180, 0.6), 
+            6px 6px 0px rgba(255, 99, 71, 0.6);
     }
+}
+
+/* Keyframes cho hiệu ứng rung rinh (shakeTitle) */
+@keyframes shakeTitle {
+    0%, 100% { transform: translateX(0); }
+    20%, 80% { transform: translateX(-5px); }
+    40%, 60% { transform: translateX(5px); }
+}
+
+
+/* Loại bỏ định kiểu cho ảnh tiêu đề nếu không còn sử dụng */
+.header-icon {
+    display: none; /* Ẩn hoàn toàn nếu bạn không muốn dùng ảnh */
+    /* Hoặc bạn có thể xóa toàn bộ khối CSS này nếu bạn đã xóa thẻ <img> trong HTML */
 }
 
 .gift-container {
@@ -160,7 +196,6 @@ h1 {
     padding: 5px;
     word-wrap: break-word;
     white-space: pre-wrap;
-    /* display: none; -> Đã chuyển sang JS để điều khiển chính xác hơn */
     display: flex; /* Dùng flexbox để căn giữa nội dung */
     align-items: center; /* Căn giữa theo chiều dọc */
     justify-content: center; /* Căn giữa theo chiều ngang */
@@ -239,6 +274,9 @@ h1 {
 
 /* Responsive adjustments */
 @media (max-width: 900px) {
+    h1 {
+        font-size: 3.5em; /* Giảm kích thước trên màn hình nhỏ hơn */
+    }
     .gift-container {
         grid-template-columns: repeat(4, 1fr);
     }
@@ -262,12 +300,13 @@ h1 {
     .gift-bag.open {
         transform: translate(-50%, -50%) scale(1.2); 
     }
-    .header-icon {
-        width: 40px; 
-    }
 }
 
 @media (max-width: 700px) {
+    h1 {
+        font-size: 2.8em; /* Giảm kích thước trên màn hình nhỏ hơn nữa */
+        padding: 8px 15px;
+    }
     .gift-container {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -292,12 +331,13 @@ h1 {
     .gift-bag.open {
         transform: translate(-50%, -50%) scale(1.1);
     }
-    .header-icon {
-        width: 35px;
-    }
 }
 
 @media (max-width: 500px) {
+    h1 {
+        font-size: 2.2em; /* Kích thước phù hợp cho di động */
+        padding: 5px 10px;
+    }
     .gift-container {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -325,8 +365,5 @@ h1 {
     }
     .gift-bag.open {
         transform: translate(-50%, -50%) scale(1.05);
-    }
-    .header-icon {
-        width: 30px;
     }
 }
