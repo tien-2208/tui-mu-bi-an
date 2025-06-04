@@ -2,8 +2,8 @@ const giftContainer = document.getElementById('giftContainer');
 const shuffleBtn = document.getElementById('shuffleBtn');
 const playAgainBtn = document.getElementById('playAgainBtn');
 const resetBtn = document.getElementById('resetBtn');
-const saveDataBtn = document.getElementById('saveDataBtn');
-const loadDataBtn = document.getElementById('loadDataBtn');
+
+// Các biến cho nút Lưu và Tải dữ liệu đã được xóa
 
 const numberOfGiftBags = 10;
 const maxContentLength = 150; // Giới hạn ký tự
@@ -61,8 +61,7 @@ function createGiftBag(index) {
             playAgainBtn.style.display = 'block';
             shuffleBtn.style.display = 'none';
             resetBtn.style.display = 'none';
-            saveDataBtn.style.display = 'none'; // Ẩn nút lưu
-            loadDataBtn.style.display = 'none'; // Ẩn nút tải
+            // Các nút lưu/tải đã bị xóa nên không cần ẩn/hiện ở đây nữa
         } else if (!giftBag.classList.contains('shuffled')) {
             alert('Hãy trộn túi mù trước khi mở!');
         }
@@ -88,8 +87,7 @@ function initializeGiftBags() {
     shuffleBtn.style.display = 'block';
     playAgainBtn.style.display = 'none';
     resetBtn.style.display = 'block';
-    saveDataBtn.style.display = 'block';
-    loadDataBtn.style.display = 'block';
+    // Các nút lưu/tải đã bị xóa
 }
 
 // Hàm trộn ngẫu nhiên mảng
@@ -123,8 +121,7 @@ shuffleBtn.addEventListener('click', () => {
     });
 
     shuffleBtn.disabled = true; // Vô hiệu hóa nút trộn sau khi đã trộn
-    saveDataBtn.style.display = 'none';
-    loadDataBtn.style.display = 'none';
+    // Các nút lưu/tải đã bị xóa nên không cần ẩn/hiện ở đây nữa
 });
 
 // Xử lý nút "Chơi Tiếp"
@@ -148,10 +145,8 @@ playAgainBtn.addEventListener('click', () => {
 
     playAgainBtn.style.display = 'none';
     resetBtn.style.display = 'block'; 
-    saveDataBtn.style.display = 'none';
-    loadDataBtn.style.display = 'none'; 
+    // Các nút lưu/tải đã bị xóa nên không cần ẩn/hiện ở đây nữa
 });
-
 
 // Xử lý nút đặt lại
 resetBtn.addEventListener('click', () => {
@@ -168,35 +163,7 @@ resetBtn.addEventListener('click', () => {
     shuffleBtn.disabled = false; // Bật lại nút trộn
     shuffleBtn.style.display = 'block'; // Hiện nút trộn
     playAgainBtn.style.display = 'none'; // Ẩn nút chơi tiếp
-    saveDataBtn.style.display = 'block';
-    loadDataBtn.style.display = 'block';
-});
-
-// Xử lý nút Lưu Dữ Liệu
-saveDataBtn.addEventListener('click', () => {
-    // Lấy nội dung từ tất cả các textarea (trạng thái chưa trộn)
-    const dataToSave = giftBags.map(bag => bag.querySelector('textarea').value); 
-    // Lưu vào Local Storage
-    localStorage.setItem('mysteryBlindBagData', JSON.stringify(dataToSave));
-    alert('Dữ liệu đã được lưu!');
-});
-
-// Xử lý nút Tải Dữ Liệu
-loadDataBtn.addEventListener('click', () => {
-    const savedData = localStorage.getItem('mysteryBlindBagData');
-    if (savedData) {
-        currentGiftContents = JSON.parse(savedData);
-        // Đặt lại trò chơi và gán nội dung đã tải vào các ô textarea
-        initializeGiftBags(); // Khởi tạo lại các túi để reset trạng thái
-        giftBags.forEach((bag, index) => {
-            if (currentGiftContents[index] !== undefined) {
-                bag.querySelector('textarea').value = currentGiftContents[index]; 
-            }
-        });
-        alert('Dữ liệu đã được tải!');
-    } else {
-        alert('Không có dữ liệu nào được lưu!');
-    }
+    // Các nút lưu/tải đã bị xóa nên không cần ẩn/hiện ở đây nữa
 });
 
 // Khởi tạo lần đầu khi tải trang
