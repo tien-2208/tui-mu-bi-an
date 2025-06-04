@@ -57,19 +57,24 @@ function createGiftBag(index, initialData) {
             giftBag.classList.remove('shuffled-yellow');
             giftBag.classList.add(giftBag.dataset.originalColor); // Lấy màu gốc từ dataset
 
-            // Thêm class 'open' cho túi được chọn
-            giftBag.classList.add('open'); // <--- Class này kích hoạt CSS để căn giữa và hiển thị icon hộp quà
+            // 1. Thêm cả class 'open' và 'fading-in' ngay lập tức
+            giftBag.classList.add('open', 'fading-in');
 
             // Ẩn tất cả các túi khác sau một khoảng trễ ngắn
-            // để túi được chọn có thời gian biến đổi trước khi các túi khác biến mất.
-            // Điều này giúp tránh việc tính toán lại vị trí đột ngột.
             setTimeout(() => {
                 giftBags.forEach(bag => {
                     if (bag !== giftBag) {
                         bag.classList.add('hidden');
                     }
                 });
-            }, 100); // Khoảng trễ 100ms
+
+                // 2. Sau khi các túi khác ẩn đi và có một khoảng trễ nhỏ, loại bỏ 'fading-in'
+                // Điều này kích hoạt hiệu ứng fade-in từ opacity: 0 lên opacity: 1
+                setTimeout(() => {
+                    giftBag.classList.remove('fading-in');
+                }, 50); // Khoảng trễ rất ngắn để đảm bảo class đã được áp dụng trước đó
+
+            }, 100); // Khoảng trễ 100ms như cũ cho việc ẩn túi
 
             content.textContent = giftBag.dataset.actualContent || 'Trống không!';
             content.style.display = 'flex'; // Hiển thị nội dung khi mở
@@ -117,7 +122,7 @@ function initializeGiftBags(data = []) {
             giftBag.querySelector('textarea').value = dataItem.content;
             giftBag.querySelector('span.label').textContent = `Túi Mù ${dataItem.originalIndex + 1}`;
 
-            giftBag.classList.remove('shuffled-yellow', 'shuffled', 'open', 'hidden');
+            giftBag.classList.remove('shuffled-yellow', 'shuffled', 'open', 'hidden', 'fading-in'); // <--- Thêm 'fading-in' vào remove
             giftBag.classList.remove('pink', 'black');
             giftBag.classList.add(dataItem.color);
 
@@ -127,7 +132,7 @@ function initializeGiftBags(data = []) {
             giftBag.querySelector('textarea').readOnly = false;
             giftBag.querySelector('.content').style.display = 'none';
 
-            // Đảm bảo không có position: fixed và transform khi không phải trạng thái 'open'
+            // Đảm bảo không có position: absolute và transform khi không phải trạng thái 'open'
             // Đặt lại các thuộc tính style này về mặc định của CSS
             giftBag.style.position = '';
             giftBag.style.left = '';
@@ -168,14 +173,14 @@ shuffleBtn.addEventListener('click', () => {
 
         bag.classList.add('shuffled', 'shuffled-yellow');
         bag.classList.remove('pink', 'black');
-        bag.classList.remove('open', 'hidden');
+        bag.classList.remove('open', 'hidden', 'fading-in'); // <--- Thêm 'fading-in' vào remove
 
         bag.querySelector('textarea').readOnly = true;
         bag.querySelector('textarea').style.display = 'none';
 
         bag.querySelector('.content').style.display = 'none';
 
-        // Đảm bảo không có position: fixed và transform khi không phải trạng thái 'open'
+        // Đảm bảo không có position: absolute và transform khi không phải trạng thái 'open'
         bag.style.position = '';
         bag.style.left = '';
         bag.style.top = '';
@@ -192,7 +197,7 @@ playAgainBtn.addEventListener('click', () => {
     // Ẩn tất cả các túi và reset trạng thái 'open' trước khi trộn lại
     // để đảm bảo túi đang mở được đưa về trạng thái bình thường trước khi bị ẩn.
     giftBags.forEach(bag => {
-        bag.classList.remove('open'); // Loại bỏ class 'open' ngay lập tức
+        bag.classList.remove('open', 'fading-in'); // <--- Thêm 'fading-in' vào remove
         bag.querySelector('.content').style.display = 'none';
         
         // Reset các thuộc tính style khi túi không ở trạng thái 'open'
@@ -225,10 +230,10 @@ playAgainBtn.addEventListener('click', () => {
             bag.dataset.originalColor = shuffledItem.color;
             bag.dataset.originalIndex = shuffledItem.originalIndex;
 
-            bag.classList.remove('hidden', 'open'); // Đảm bảo bỏ hidden và open
+            bag.classList.remove('hidden', 'open', 'fading-in'); // <--- Thêm 'fading-in' vào remove
             bag.querySelector('.content').style.display = 'none';
             
-            bag.classList.add('shuffled-yellow'); // Đảm bảo túi có màu vàng sau khi chơi tiếp
+            bag.classList.add('shuffled-yellow');
             bag.classList.remove('pink', 'black');
 
             // Reset các thuộc tính style
@@ -253,7 +258,7 @@ editBtn.addEventListener('click', () => {
     giftBags.forEach((bag, i) => {
         const originalDataItem = giftData[i];
 
-        bag.classList.remove('shuffled', 'open', 'hidden', 'shuffled-yellow');
+        bag.classList.remove('shuffled', 'open', 'hidden', 'shuffled-yellow', 'fading-in'); // <--- Thêm 'fading-in' vào remove
         bag.classList.remove('pink', 'black');
         bag.classList.add(originalDataItem.color);
 
@@ -262,16 +267,16 @@ editBtn.addEventListener('click', () => {
         bag.querySelector('textarea').style.display = 'block';
 
         bag.querySelector('span.label').textContent = `Túi Mù ${originalDataItem.originalIndex + 1}`;
-        bag.querySelector('span.label').style.display = 'block'; // Đảm bảo label hiển thị khi chỉnh sửa
+        bag.querySelector('span.label').style.display = 'block';
 
-        bag.querySelector('.fa-gift').style.display = 'block'; // Đảm bảo icon hộp quà hiển thị khi chỉnh sửa
+        bag.querySelector('.fa-gift').style.display = 'block';
 
         bag.querySelector('.content').style.display = 'none';
 
         // Quan trọng: Reset các thuộc tính style đã bị thay đổi bởi trạng thái 'open'
         // để túi quay về vị trí ban đầu trong lưới
         bag.style.transform = '';
-        bag.style.position = ''; // Loại bỏ position: fixed
+        bag.style.position = ''; // Loại bỏ position: absolute
         bag.style.left = '';
         bag.style.top = '';
         bag.style.zIndex = '';
