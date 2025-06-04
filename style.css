@@ -45,7 +45,7 @@ h1 {
     box-sizing: border-box; /* Giữ kích thước tổng thể */
 }
 
-/* Màu sắc túi quà */
+/* Màu sắc túi mù */
 .gift-bag.pink {
     background-color: #FF69B4; /* Hot Pink */
 }
@@ -72,16 +72,18 @@ h1 {
     transform: scale(0.8); /* Thu nhỏ một chút khi ẩn */
 }
 
+/* Chỉnh ô nhập chữ hình chữ nhật */
 .gift-bag input[type="text"] {
     width: 90%; /* Tăng chiều rộng input */
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 5px; /* Giữ một chút bo góc nhẹ hoặc đổi về 0 nếu muốn hoàn toàn chữ nhật */
     text-align: center;
     font-size: 14px;
     color: #333;
     box-sizing: border-box; /* Giữ kích thước tổng thể */
+    height: auto; /* Chiều cao tự động để ôm nội dung nếu cần */
 }
 
 .gift-bag .content {
@@ -119,7 +121,9 @@ h1 {
 .controls {
     margin-top: 20px;
     display: flex;
+    flex-wrap: wrap; /* Cho phép các nút xuống dòng trên màn hình nhỏ */
     gap: 20px;
+    justify-content: center;
 }
 
 .controls button {
@@ -164,6 +168,22 @@ h1 {
     background-color: #218838;
 }
 
+.controls button#saveDataBtn {
+    background-color: #f0ad4e; /* Màu vàng cam */
+    color: white;
+}
+.controls button#saveDataBtn:hover {
+    background-color: #ec971f;
+}
+
+.controls button#loadDataBtn {
+    background-color: #5bc0de; /* Màu xanh da trời */
+    color: white;
+}
+.controls button#loadDataBtn:hover {
+    background-color: #31b0d5;
+}
+
 /* Responsive adjustments */
 @media (max-width: 900px) {
     .gift-container {
@@ -199,7 +219,7 @@ h1 {
         font-size: 14px;
     }
     .controls button {
-        padding: 10px 20px;
+        padding: 10px 15px; /* Giảm padding cho nút trên màn hình nhỏ */
         font-size: 14px;
     }
     .gift-bag.open {
