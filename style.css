@@ -5,7 +5,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #f0f2f5;
+    background-color: #F8C8DC; /* Màu hồng pastel nhẹ nhàng cho nền */
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
@@ -34,7 +34,7 @@ h1 {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Căn trên để label và textarea không bị đẩy xuống */
+    justify-content: space-around; /* Căn đều các phần tử bên trong (icon, label, textarea/content) */
     align-items: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -43,16 +43,17 @@ h1 {
     overflow: hidden; /* Ẩn nội dung tràn ra ngoài */
     padding: 10px; /* Thêm padding để nội dung không chạm biên */
     box-sizing: border-box; /* Giữ kích thước tổng thể */
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Thêm viền sáng nhẹ cho túi */
 }
 
-/* Màu sắc túi mù */
+/* Màu sắc túi mù với hiệu ứng gradient */
 .gift-bag.pink {
-    background-color: #FF69B4; /* Hot Pink */
+    background: linear-gradient(to bottom right, #FFD1DC, #FF69B4); /* Pink Pastel to HotPink */
 }
 
 .gift-bag.black {
-    background-color: #333; /* Black */
-    color: #eee; /* Chữ màu sáng trên nền đen */
+    background: linear-gradient(to bottom right, #555, #333); /* Darker gray to Black */
+    color: #eee;
 }
 
 .gift-bag:hover {
@@ -70,6 +71,27 @@ h1 {
     opacity: 0;
     pointer-events: none; /* Vô hiệu hóa click khi ẩn */
     transform: scale(0.8); /* Thu nhỏ một chút khi ẩn */
+}
+
+/* Kiểu dáng icon túi quà */
+.gift-bag .fa-gift {
+    font-size: 40px; /* Kích thước icon */
+    color: white; /* Màu icon */
+    margin-bottom: 5px; /* Khoảng cách dưới icon */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Ẩn icon và label khi túi đã trộn hoặc đã mở */
+.gift-bag.shuffled .fa-gift,
+.gift-bag.shuffled span.label {
+    opacity: 0;
+    transform: translateY(-20px); /* Hiệu ứng trượt lên khi ẩn */
+    pointer-events: none;
+}
+
+.gift-bag.open .fa-gift,
+.gift-bag.open span.label {
+    display: none; /* Ẩn hoàn toàn khi túi mở */
 }
 
 /* Chỉnh ô nhập chữ rộng hơn và tự động xuống dòng (sử dụng textarea thay vì input text) */
@@ -105,6 +127,7 @@ h1 {
     display: flex; /* Dùng flexbox để căn giữa nội dung */
     align-items: center; /* Căn giữa theo chiều dọc */
     justify-content: center; /* Căn giữa theo chiều ngang */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Thêm bóng chữ cho dễ đọc trên nền */
 }
 
 .gift-bag.open .content {
@@ -115,11 +138,11 @@ h1 {
     color: #fff;
     font-size: 14px;
     margin-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Thêm bóng chữ cho dễ đọc trên nền */
 }
 
 /* Ẩn textarea và label khi đã trộn */
-.gift-bag.shuffled textarea, 
-.gift-bag.shuffled span.label {
+.gift-bag.shuffled textarea { 
     display: none;
 }
 
@@ -154,13 +177,13 @@ h1 {
     background-color: #0056b3;
 }
 
-.controls button#resetBtn {
-    background-color: #6c757d; /* Màu xám */
-    color: white;
+.controls button#editBtn { 
+    background-color: #ffc107; /* Màu vàng cam */
+    color: #333; /* Chữ màu tối cho dễ đọc */
 }
 
-.controls button#resetBtn:hover {
-    background-color: #5a6268;
+.controls button#editBtn:hover { 
+    background-color: #e0a800;
 }
 
 .controls button#playAgainBtn {
