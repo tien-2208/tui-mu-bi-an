@@ -34,7 +34,7 @@ h1 {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* Căn trên để label và textarea không bị đẩy xuống */
     align-items: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -72,38 +72,43 @@ h1 {
     transform: scale(0.8); /* Thu nhỏ một chút khi ẩn */
 }
 
-/* Chỉnh ô nhập chữ hình chữ nhật */
-.gift-bag input[type="text"] {
-    width: 90%; /* Tăng chiều rộng input */
+/* Chỉnh ô nhập chữ rộng hơn và tự động xuống dòng (sử dụng textarea thay vì input text) */
+.gift-bag textarea { 
+    width: 95%; /* Rộng hơn để dễ nhập */
+    height: 90px; /* Tăng chiều cao để nhìn rõ nhiều dòng chữ */
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px; /* Giữ một chút bo góc nhẹ hoặc đổi về 0 nếu muốn hoàn toàn chữ nhật */
-    text-align: center;
+    border-radius: 5px;
+    text-align: left; /* Chữ căn trái để dễ đọc hơn */
     font-size: 14px;
     color: #333;
-    box-sizing: border-box; /* Giữ kích thước tổng thể */
-    height: auto; /* Chiều cao tự động để ôm nội dung nếu cần */
+    box-sizing: border-box;
+    resize: none; /* Ngăn người dùng kéo dãn textarea */
+    overflow-y: auto; /* Thêm scrollbar nếu nội dung quá dài */
+    white-space: pre-wrap; /* Quan trọng: Giữ định dạng xuống dòng và khoảng trắng khi nhập */
+    word-wrap: break-word; /* Tự động ngắt từ nếu quá dài */
 }
 
 .gift-bag .content {
     color: #fff;
     font-size: 16px;
     font-weight: bold;
-    text-align: center;
+    text-align: center; /* Vẫn căn giữa khi hiển thị */
     padding: 5px;
     word-wrap: break-word; /* Tự động ngắt chữ dài */
-    max-height: 80px; /* Giới hạn chiều cao của nội dung */
+    white-space: pre-wrap; /* Quan trọng: Giữ định dạng xuống dòng và khoảng trắng */
+    max-height: 120px; /* Tăng giới hạn chiều cao của nội dung để hiển thị nhiều hơn */
     overflow: auto; /* Thêm scrollbar nếu nội dung quá dài */
-    display: none; /* Ẩn ban đầu */
+    display: none; /* Ẩn ban đầu, sẽ được JavaScript hiển thị */
     flex-grow: 1; /* Cho phép nội dung chiếm không gian còn lại */
     display: flex; /* Dùng flexbox để căn giữa nội dung */
-    align-items: center;
-    justify-content: center;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
 }
 
 .gift-bag.open .content {
-    display: flex; /* Hiển thị khi mở */
+    display: flex; /* HIỂN THỊ KHI MỞ */
 }
 
 .gift-bag span.label {
@@ -112,8 +117,8 @@ h1 {
     margin-bottom: 5px;
 }
 
-/* Ẩn input và label khi đã trộn */
-.gift-bag.shuffled input[type="text"],
+/* Ẩn textarea và label khi đã trộn */
+.gift-bag.shuffled textarea, 
 .gift-bag.shuffled span.label {
     display: none;
 }
@@ -211,9 +216,10 @@ h1 {
         width: 100px;
         height: 130px;
     }
-    .gift-bag input[type="text"] {
+    .gift-bag textarea { 
         font-size: 12px;
         padding: 6px;
+        height: 60px; /* Chiều cao nhỏ hơn trên màn hình nhỏ */
     }
     .gift-bag .content {
         font-size: 14px;
