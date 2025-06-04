@@ -12,67 +12,51 @@ body {
     transition: background-color 0.5s ease;
 }
 
+/* Phần tiêu đề mới */
+.header-content {
+    display: flex; /* Sử dụng flexbox để căn chỉnh các phần tử con trên cùng một hàng */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 15px; /* Khoảng cách giữa các phần tử */
+    margin-bottom: 30px;
+}
+
 h1 {
-    color: #333; /* Màu chữ chính */
-    margin-bottom: 30px; /* Khoảng cách dưới tiêu đề */
-    font-size: 4em; /* Kích thước chữ lớn hơn */
+    color: #4A4A4A; /* Màu chữ chính, dễ đọc hơn */
+    font-size: 3.5em; /* Kích thước chữ vẫn lớn nhưng không quá choáng */
     font-weight: bold; /* Chữ in đậm */
-    text-shadow:
-        -2px -2px 0 #FFF, /* Viền chữ màu trắng */
-        2px -2px 0 #FFF,
-        -2px 2px 0 #FFF,
-        2px 2px 0 #FFF,
-        4px 4px 0px rgba(255, 105, 180, 0.6), /* Đổ bóng màu hồng nhẹ */
-        6px 6px 0px rgba(255, 99, 71, 0.6); /* Đổ bóng màu cam nhẹ hơn */
-    letter-spacing: 2px; /* Khoảng cách giữa các chữ */
-    animation:
-        pulseColor 3s infinite alternate, /* Hiệu ứng đổi màu đổ bóng */
-        shakeTitle 0.8s infinite alternate ease-in-out; /* Hiệu ứng rung rinh */
-    padding: 10px 20px; /* Thêm padding cho tiêu đề */
-    border-radius: 15px; /* Bo tròn góc */
-    background: linear-gradient(45deg, #FFD1DC, #FF69B4); /* Nền gradient nhẹ cho tiêu đề */
-    -webkit-background-clip: text; /* Tạo nền cho chữ (chỉ hoạt động trên webkit) */
-    -webkit-text-fill-color: transparent; /* Làm trong suốt chữ để thấy nền */
-    color: #333; /* Đặt lại màu chữ dự phòng nếu -webkit- không hoạt động */
-    background-clip: text;
-    text-fill-color: transparent; /* Chuẩn CSS */
+    letter-spacing: 1px; /* Giảm khoảng cách chữ một chút */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ để nổi bật */
+    text-align: center;
+    /* Loại bỏ các animation và background-clip phức tạp để đơn giản hóa */
+    /* background: none; */
+    /* -webkit-background-clip: unset; */
+    /* -webkit-text-fill-color: unset; */
+    /* background-clip: unset; */
+    /* text-fill-color: unset; */
+    /* padding: 0; */
+    /* border-radius: 0; */
 }
 
-/* Keyframes cho hiệu ứng đổi màu đổ bóng (pulseColor) */
-@keyframes pulseColor {
-    0% {
-        text-shadow:
-            -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
-            4px 4px 0px rgba(255, 105, 180, 0.6),
-            6px 6px 0px rgba(255, 99, 71, 0.6);
-    }
-    50% {
-        text-shadow:
-            -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
-            4px 4px 0px rgba(135, 206, 250, 0.6), /* Màu xanh nhạt */
-            6px 6px 0px rgba(0, 191, 255, 0.6); /* Màu xanh biển */
-    }
-    100% {
-        text-shadow:
-            -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF,
-            4px 4px 0px rgba(255, 105, 180, 0.6),
-            6px 6px 0px rgba(255, 99, 71, 0.6);
-    }
+.header-decoration {
+    font-size: 2em; /* Kích thước biểu tượng trang trí */
+    color: #FF69B4; /* Màu hồng nóng cho biểu tượng */
+    animation: sparkle 1.5s infinite alternate; /* Thêm hiệu ứng lấp lánh nhẹ */
 }
 
-/* Keyframes cho hiệu ứng rung rinh (shakeTitle) */
-@keyframes shakeTitle {
-    0%, 100% { transform: translateX(0); }
-    20%, 80% { transform: translateX(-5px); }
-    40%, 60% { transform: translateX(5px); }
+/* Keyframes cho hiệu ứng lấp lánh nhẹ */
+@keyframes sparkle {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
 }
 
 
-/* Loại bỏ định kiểu cho ảnh tiêu đề nếu không còn sử dụng */
-.header-icon {
-    display: none; /* Ẩn hoàn toàn nếu bạn không muốn dùng ảnh */
-}
+/* Loại bỏ các keyframes cũ nếu không còn sử dụng */
+/* @keyframes pulseColor { ... } */
+/* @keyframes shakeTitle { ... } */
 
+
+/* Phần còn lại của CSS không thay đổi */
 .gift-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* 5 túi trên 1 hàng */
@@ -138,12 +122,11 @@ h1 {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Bóng đổ rõ hơn */
     display: flex; /* Đảm bảo là flex container */
     flex-direction: column; /* Xếp các phần tử theo cột */
-    
-    /* Bắt đầu nội dung từ trên cùng */
-    justify-content: flex-start; /* THAY ĐỔI Ở ĐÂY: Đưa nội dung lên phía trên */
+
+    justify-content: flex-start; /* Đưa nội dung lên phía trên */
     align-items: center; /* Vẫn căn giữa theo chiều ngang */
 
-    padding: 15px; /* THAY ĐỔI Ở ĐÂY: Tăng padding để có khoảng trống hợp lý xung quanh nội dung */
+    padding: 15px; /* Tăng padding để có khoảng trống hợp lý xung quanh nội dung */
 }
 
 .gift-bag.hidden {
@@ -200,7 +183,7 @@ h1 {
     word-wrap: break-word;
     white-space: pre-wrap;
     display: flex; /* Dùng flexbox để căn giữa nội dung */
-    align-items: flex-start; /* THAY ĐỔI Ở ĐÂY: Căn nội dung lên trên */
+    align-items: flex-start; /* Căn nội dung lên trên */
     justify-content: center; /* Vẫn căn giữa theo chiều ngang */
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     height: auto;
@@ -277,8 +260,14 @@ h1 {
 
 /* Responsive adjustments */
 @media (max-width: 900px) {
+    .header-content {
+        gap: 10px;
+    }
     h1 {
-        font-size: 3.5em; /* Giảm kích thước trên màn hình nhỏ hơn */
+        font-size: 3em;
+    }
+    .header-decoration {
+        font-size: 1.8em;
     }
     .gift-container {
         grid-template-columns: repeat(4, 1fr);
@@ -307,9 +296,15 @@ h1 {
 }
 
 @media (max-width: 700px) {
+    .header-content {
+        gap: 8px;
+    }
     h1 {
-        font-size: 2.8em; /* Giảm kích thước trên màn hình nhỏ hơn nữa */
+        font-size: 2.5em;
         padding: 8px 15px;
+    }
+    .header-decoration {
+        font-size: 1.5em;
     }
     .gift-container {
         grid-template-columns: repeat(3, 1fr);
@@ -339,9 +334,16 @@ h1 {
 }
 
 @media (max-width: 500px) {
+    .header-content {
+        flex-direction: column; /* Xếp tiêu đề và biểu tượng theo cột trên màn hình nhỏ */
+        gap: 5px;
+    }
     h1 {
-        font-size: 2.2em; /* Kích thước phù hợp cho di động */
+        font-size: 1.8em;
         padding: 5px 10px;
+    }
+    .header-decoration {
+        font-size: 1.2em;
     }
     .gift-container {
         grid-template-columns: repeat(2, 1fr);
