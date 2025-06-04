@@ -23,30 +23,29 @@ function createGiftBag(index, initialData) {
     giftBag.dataset.originalColor = initialData.color;
     giftBag.dataset.originalIndex = initialData.originalIndex; // Lưu số thứ tự ban đầu
 
-    // Bỏ icon hộp quà, không tạo phần tử này
-    // const giftIcon = document.createElement('i');
-    // giftIcon.classList.add('fas', 'fa-gift');
+    const giftIcon = document.createElement('i'); // Giữ lại phần tử này dù không hiển thị
+    giftIcon.classList.add('fas', 'fa-gift');
 
     const label = document.createElement('span');
     label.classList.add('label');
-    // Hiển thị số thứ tự gốc của túi, sẽ không thay đổi khi trộn
+    // Chỉ set text content, việc hiển thị sẽ được quản lý bằng CSS/JS dựa trên trạng thái
     label.textContent = `${initialData.originalIndex + 1}`; // Chỉ hiển thị số
 
     const textarea = document.createElement('textarea');
     textarea.placeholder = 'Ghi điều ước (tối đa 150 ký tự)...';
     textarea.maxLength = maxContentLength;
     textarea.value = initialData.content; // Đặt giá trị ban đầu cho textarea
-    textarea.style.display = 'block'; // Mặc định hiển thị khi ở chế độ chỉnh sửa
+    textarea.style.display = 'block'; // Mặc định hiển thị khi ở chế độ nhập
 
     textarea.addEventListener('click', (event) => {
-        event.stopPropagation(); // Ngăn sự kiện click lan truyền lên túi mù
+        event.stopPropagation();
     });
 
     const content = document.createElement('div');
     content.classList.add('content');
     content.style.display = 'none';
 
-    // giftBag.appendChild(giftIcon); // Không thêm icon
+    giftBag.appendChild(giftIcon); // Vẫn thêm vào DOM, nhưng CSS sẽ ẩn
     giftBag.appendChild(label);
     giftBag.appendChild(textarea);
     giftBag.appendChild(content);
@@ -60,10 +59,6 @@ function createGiftBag(index, initialData) {
 
             // Thêm class 'open' cho túi được chọn
             giftBag.classList.add('open');
-
-            // Ẩn các phần tử không mong muốn khi túi mở
-            label.style.display = 'none'; // Ẩn số thứ tự
-            textarea.style.display = 'none'; // Ẩn textarea
 
             // Ẩn tất cả các túi khác sau một khoảng trễ ngắn
             setTimeout(() => {
@@ -118,24 +113,26 @@ function initializeGiftBags(data = []) {
             giftBag.dataset.originalIndex = dataItem.originalIndex;
 
             giftBag.querySelector('textarea').value = dataItem.content;
-            // Hiển thị số thứ tự gốc khi ở chế độ chỉnh sửa
-            giftBag.querySelector('span.label').textContent = `${dataItem.originalIndex + 1}`;
+            giftBag.querySelector('span.label').textContent = `${dataItem.originalIndex + 1}`; // Cập nhật số thứ tự
 
             giftBag.classList.remove('shuffled-yellow', 'shuffled', 'open', 'hidden');
             giftBag.classList.remove('pink', 'black');
             giftBag.classList.add(dataItem.color);
 
-            // giftBag.querySelector('.fa-gift').style.display = 'block'; // Không dùng icon
-            giftBag.querySelector('span.label').style.display = 'flex'; // Đảm bảo số thứ tự hiển thị
-            giftBag.querySelector('textarea').style.display = 'block'; // Hiển thị textarea khi chỉnh sửa
+            // Ở chế độ nhập (edit mode), hiển thị textarea, ẩn label
+            giftBag.querySelector('textarea').style.display = 'block';
             giftBag.querySelector('textarea').readOnly = false;
+            giftBag.querySelector('span.label').style.opacity = '0'; // Ẩn số khi đang nhập
+            giftBag.querySelector('span.label').style.pointerEvents = 'none'; // Vô hiệu hóa tương tác
+            
+            giftBag.querySelector('.fa-gift').style.display = 'none'; // Đảm bảo icon ẩn
             giftBag.querySelector('.content').style.display = 'none';
-
-            // Đảm bảo không có position: absolute và transform khi không phải trạng thái 'open'
+            
+            // Reset position styles
             giftBag.style.position = '';
             giftBag.style.left = '';
             giftBag.style.top = '';
-            giftBag.style.transform = ''; // Loại bỏ transform
+            giftBag.style.transform = '';
             giftBag.style.zIndex = '';
         });
     }
@@ -167,7 +164,7 @@ shuffleBtn.addEventListener('click', () => {
 
         bag.dataset.actualContent = shuffledItem.content;
         bag.dataset.originalColor = shuffledItem.color;
-        bag.dataset.originalIndex = shuffledItem.originalIndex; // Lưu số thứ tự gốc
+        bag.dataset.originalIndex = shuffledItem.originalIndex;
 
         bag.classList.add('shuffled', 'shuffled-yellow');
         bag.classList.remove('pink', 'black');
@@ -176,15 +173,18 @@ shuffleBtn.addEventListener('click', () => {
         bag.querySelector('textarea').readOnly = true;
         bag.querySelector('textarea').style.display = 'none'; // Ẩn textarea
 
-        bag.querySelector('span.label').style.display = 'flex'; // Hiện lại số thứ tự
-        
+        bag.querySelector('span.label').textContent = `${shuffledItem.originalIndex + 1}`; // Cập nhật số
+        bag.querySelector('span.label').style.opacity = '1'; // Hiển thị số
+        bag.querySelector('span.label').style.pointerEvents = 'auto'; // Cho phép tương tác lại
+
+        bag.querySelector('.fa-gift').style.display = 'none'; // Đảm bảo icon ẩn
         bag.querySelector('.content').style.display = 'none';
 
-        // Đảm bảo không có position: absolute và transform khi không phải trạng thái 'open'
+        // Reset position styles
         bag.style.position = '';
         bag.style.left = '';
         bag.style.top = '';
-        bag.style.transform = ''; // Loại bỏ transform
+        bag.style.transform = '';
         bag.style.zIndex = '';
     });
 
@@ -196,20 +196,22 @@ shuffleBtn.addEventListener('click', () => {
 playAgainBtn.addEventListener('click', () => {
     // Ẩn tất cả các túi và reset trạng thái 'open' trước khi trộn lại
     giftBags.forEach(bag => {
-        bag.classList.remove('open'); // Loại bỏ class 'open' ngay lập tức
+        bag.classList.remove('open');
         bag.querySelector('.content').style.display = 'none';
         
         // Reset các thuộc tính style khi túi không ở trạng thái 'open'
         bag.style.position = '';
         bag.style.left = '';
         bag.style.top = '';
-        bag.style.transform = ''; // Loại bỏ transform
+        bag.style.transform = '';
         bag.style.zIndex = '';
 
-        // Sau đó thêm lại class 'shuffled-yellow' và 'shuffled' và 'hidden'
         bag.classList.add('shuffled-yellow', 'shuffled');
-        bag.classList.remove('pink', 'black'); // Loại bỏ màu gốc nếu có
-        bag.querySelector('span.label').style.display = 'flex'; // Hiển thị số thứ tự
+        bag.classList.remove('pink', 'black');
+
+        bag.querySelector('span.label').style.opacity = '1'; // Hiện số khi quay lại trạng thái trộn
+        bag.querySelector('span.label').style.pointerEvents = 'auto';
+        bag.querySelector('textarea').style.display = 'none'; // Ẩn textarea
     });
     
     // Sau khi reset, ẩn tất cả các túi trước khi trộn để tránh nhấp nháy
@@ -229,11 +231,15 @@ playAgainBtn.addEventListener('click', () => {
             bag.dataset.originalColor = shuffledItem.color;
             bag.dataset.originalIndex = shuffledItem.originalIndex;
 
-            bag.classList.remove('hidden', 'open'); // Đảm bảo bỏ hidden và open
+            bag.classList.remove('hidden', 'open');
             bag.querySelector('.content').style.display = 'none';
             
-            bag.classList.add('shuffled-yellow'); // Đảm bảo túi có màu vàng sau khi chơi tiếp
+            bag.classList.add('shuffled-yellow');
             bag.classList.remove('pink', 'black');
+
+            bag.querySelector('span.label').textContent = `${shuffledItem.originalIndex + 1}`; // Cập nhật số
+            bag.querySelector('span.label').style.opacity = '1'; // Hiện số
+            bag.querySelector('span.label').style.pointerEvents = 'auto'; // Cho phép tương tác lại
 
             // Reset các thuộc tính style
             bag.style.position = '';
@@ -241,22 +247,18 @@ playAgainBtn.addEventListener('click', () => {
             bag.style.top = '';
             bag.style.transform = '';
             bag.style.zIndex = '';
-
-            // Đảm bảo textarea ẩn và label hiển thị
-            bag.querySelector('textarea').style.display = 'none';
-            bag.querySelector('span.label').style.display = 'flex';
         });
     }, 100);
 
     playAgainBtn.style.display = 'none';
     editBtn.style.display = 'block';
-    shuffleBtn.disabled = false; // Đảm bảo nút trộn được kích hoạt lại
+    shuffleBtn.disabled = false;
     shuffleBtn.style.display = 'block';
 });
 
 // Xử lý nút "Chỉnh Sửa"
 editBtn.addEventListener('click', () => {
-    giftData.sort((a, b) => a.originalIndex - b.originalIndex); // Sắp xếp lại theo thứ tự gốc
+    giftData.sort((a, b) => a.originalIndex - b.originalIndex);
 
     giftBags.forEach((bag, i) => {
         const originalDataItem = giftData[i];
@@ -269,12 +271,15 @@ editBtn.addEventListener('click', () => {
         bag.querySelector('textarea').readOnly = false;
         bag.querySelector('textarea').style.display = 'block'; // Hiển thị textarea
 
-        bag.querySelector('span.label').textContent = `${originalDataItem.originalIndex + 1}`; // Luôn hiển thị số thứ tự gốc
-        bag.querySelector('span.label').style.display = 'flex'; // Đảm bảo label hiển thị
+        bag.querySelector('span.label').textContent = `${originalDataItem.originalIndex + 1}`;
+        bag.querySelector('span.label').style.opacity = '0'; // Ẩn số khi chỉnh sửa
+        bag.querySelector('span.label').style.pointerEvents = 'none'; // Vô hiệu hóa tương tác
+        
+        bag.querySelector('.fa-gift').style.display = 'none'; // Đảm bảo icon ẩn
 
         bag.querySelector('.content').style.display = 'none';
 
-        // Quan trọng: Reset các thuộc tính style đã bị thay đổi bởi trạng thái 'open'
+        // Reset các thuộc tính style đã bị thay đổi bởi trạng thái 'open'
         bag.style.transform = '';
         bag.style.position = '';
         bag.style.left = '';
