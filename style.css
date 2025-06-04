@@ -14,7 +14,28 @@ body {
 
 h1 {
     color: #333;
-    margin-bottom: 30px;
+    margin-bottom: 10px; /* Giảm margin-bottom để ảnh gần tiêu đề hơn */
+    display: inline-block; /* Quan trọng để ảnh có thể đứng cạnh h1 */
+    vertical-align: middle; /* Căn giữa theo chiều dọc với ảnh */
+}
+
+/* Định kiểu cho hình ảnh tiêu đề */
+.header-icon {
+    width: 50px; /* Điều chỉnh kích thước ảnh phù hợp */
+    height: auto; /* Giữ tỷ lệ khung hình */
+    margin-left: 10px; /* Khoảng cách giữa chữ và ảnh */
+    vertical-align: middle; /* Căn giữa theo chiều dọc với tiêu đề */
+    animation: bounce 1s infinite alternate; /* Thêm hiệu ứng nhún nhảy nhẹ */
+}
+
+/* Keyframes cho hiệu ứng bounce */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-5px); /* Nhún lên 5px */
+    }
 }
 
 .gift-container {
@@ -139,21 +160,19 @@ h1 {
     padding: 5px;
     word-wrap: break-word;
     white-space: pre-wrap;
-    display: none;
-    /* Loại bỏ flex-grow để content không chiếm hết khoảng trống */
-    /* flex-grow: 1; */ 
+    /* display: none; -> Đã chuyển sang JS để điều khiển chính xác hơn */
     display: flex; /* Dùng flexbox để căn giữa nội dung */
     align-items: center; /* Căn giữa theo chiều dọc */
     justify-content: center; /* Căn giữa theo chiều ngang */
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    height: auto; /* Quan trọng: Đảm bảo content tự động điều chỉnh chiều cao */
-    min-height: 50px; /* Chiều cao tối thiểu để căn giữa khi nội dung ít */
+    height: auto; 
+    min-height: 50px; 
 }
 
 .gift-bag.open .content {
     display: flex;
-    max-height: unset; /* Xóa bỏ giới hạn chiều cao tối đa của nội dung */
-    flex-grow: 1; /* Cho phép content chiếm không gian còn lại khi mở */
+    max-height: unset; 
+    flex-grow: 1; 
 }
 
 .gift-bag span.label {
@@ -240,9 +259,11 @@ h1 {
     .gift-bag span.label {
         font-size: 14px;
     }
-    /* Kích thước phóng to khi mở trên màn hình nhỏ cũng phải được điều chỉnh */
     .gift-bag.open {
-        transform: translate(-50%, -50%) scale(1.2); /* Phóng to ít hơn trên màn hình trung bình */
+        transform: translate(-50%, -50%) scale(1.2); 
+    }
+    .header-icon {
+        width: 40px; 
     }
 }
 
@@ -269,7 +290,10 @@ h1 {
         font-size: 12px;
     }
     .gift-bag.open {
-        transform: translate(-50%, -50%) scale(1.1); /* Phóng to ít hơn trên màn hình nhỏ */
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+    .header-icon {
+        width: 35px;
     }
 }
 
@@ -300,6 +324,9 @@ h1 {
         font-size: 14px;
     }
     .gift-bag.open {
-        transform: translate(-50%, -50%) scale(1.05); /* Phóng to rất ít trên di động */
+        transform: translate(-50%, -50%) scale(1.05);
+    }
+    .header-icon {
+        width: 30px;
     }
 }
