@@ -27,14 +27,6 @@ h1 {
     letter-spacing: 1px; /* Giảm khoảng cách chữ một chút */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ để nổi bật */
     text-align: center;
-    /* Loại bỏ các animation và background-clip phức tạp để đơn giản hóa */
-    /* background: none; */
-    /* -webkit-background-clip: unset; */
-    /* -webkit-text-fill-color: unset; */
-    /* background-clip: unset; */
-    /* text-fill-color: unset; */
-    /* padding: 0; */
-    /* border-radius: 0; */
 }
 
 .header-decoration {
@@ -50,13 +42,6 @@ h1 {
     100% { transform: scale(1); opacity: 0.8; }
 }
 
-
-/* Loại bỏ các keyframes cũ nếu không còn sử dụng */
-/* @keyframes pulseColor { ... } */
-/* @keyframes shakeTitle { ... } */
-
-
-/* Phần còn lại của CSS không thay đổi */
 .gift-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* 5 túi trên 1 hàng */
@@ -107,25 +92,23 @@ h1 {
 }
 
 .gift-bag.open {
-    transform: scale(1.5); /* Phóng to túi được chọn */
-    z-index: 10; /* Đảm bảo túi được chọn nằm trên cùng */
+    /* Các thuộc tính này định vị túi mù vào giữa màn hình và phóng to */
+    position: fixed; /* Quan trọng: Đảm bảo nó tách rời khỏi luồng tài liệu */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.5); /* Kết hợp căn giữa và phóng to */
+    z-index: 100; /* Đảm bảo nó luôn nằm trên các phần tử khác */
+
+    /* Các thuộc tính khác của túi khi mở */
     transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
     height: auto;
     max-height: 80vh;
     overflow-y: auto;
-
-    /* Di chuyển túi ra giữa màn hình */
-    position: fixed; /* Rút túi ra khỏi dòng chảy tài liệu */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1.5); /* Kết hợp căn giữa và phóng to */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Bóng đổ rõ hơn */
-    display: flex; /* Đảm bảo là flex container */
-    flex-direction: column; /* Xếp các phần tử theo cột */
-
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start; /* Đưa nội dung lên phía trên */
     align-items: center; /* Vẫn căn giữa theo chiều ngang */
-
     padding: 15px; /* Tăng padding để có khoảng trống hợp lý xung quanh nội dung */
 }
 
@@ -143,7 +126,7 @@ h1 {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Ẩn icon và label khi túi đã trộn hoặc đã mở */
+/* Ẩn icon và label khi túi đã trộn */
 .gift-bag.shuffled .fa-gift,
 .gift-bag.shuffled span.label {
     opacity: 0;
@@ -151,10 +134,18 @@ h1 {
     pointer-events: none;
 }
 
-.gift-bag.open .fa-gift,
+/* Khi túi mở: Ẩn label, giữ lại icon hộp quà */
 .gift-bag.open span.label {
-    display: none;
+    display: none; /* Ẩn nhãn khi túi mở */
 }
+
+/* Đảm bảo icon hộp quà vẫn hiển thị khi túi mở */
+.gift-bag.open .fa-gift {
+    display: block; /* Đảm bảo icon hiển thị */
+    font-size: 60px; /* Tăng kích thước icon một chút khi mở */
+    margin-bottom: 15px; /* Thêm khoảng cách dưới icon để tách khỏi nội dung */
+}
+
 
 /* Chỉnh ô nhập chữ rộng hơn và tự động xuống dòng (sử dụng textarea thay vì input text) */
 .gift-bag textarea {
@@ -293,6 +284,10 @@ h1 {
         transform: translate(-50%, -50%) scale(1.2);
         padding: 10px; /* Điều chỉnh padding cho responsive */
     }
+    .gift-bag.open .fa-gift {
+        font-size: 50px; /* Điều chỉnh kích thước icon khi mở trên màn hình nhỏ hơn */
+        margin-bottom: 10px;
+    }
 }
 
 @media (max-width: 700px) {
@@ -330,6 +325,10 @@ h1 {
     .gift-bag.open {
         transform: translate(-50%, -50%) scale(1.1);
         padding: 8px; /* Điều chỉnh padding cho responsive */
+    }
+    .gift-bag.open .fa-gift {
+        font-size: 40px;
+        margin-bottom: 8px;
     }
 }
 
@@ -373,5 +372,9 @@ h1 {
     .gift-bag.open {
         transform: translate(-50%, -50%) scale(1.05);
         padding: 5px; /* Điều chỉnh padding cho responsive */
+    }
+    .gift-bag.open .fa-gift {
+        font-size: 40px;
+        margin-bottom: 5px;
     }
 }
