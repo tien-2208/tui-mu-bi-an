@@ -56,12 +56,18 @@ h1 {
     color: #eee;
 }
 
+/* Màu vàng khi đã trộn */
+.gift-bag.shuffled-yellow {
+    background: linear-gradient(to bottom right, #FFEB3B, #FFC107); /* Light Yellow to Amber */
+    color: #333; /* Chữ màu tối trên nền vàng */
+}
+
 .gift-bag:hover {
     transform: translateY(-5px);
 }
 
 .gift-bag.open {
-    background-color: #4CAF50; /* Màu xanh lá khi mở */
+    /* Khi mở, màu sẽ trở lại màu gốc được gán trong JS */
     transform: scale(1.5); /* Phóng to túi được chọn */
     z-index: 10; /* Đảm bảo túi được chọn nằm trên cùng */
     transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
