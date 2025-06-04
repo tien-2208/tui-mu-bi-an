@@ -7,22 +7,18 @@ const numberOfGiftBags = 10;
 const maxContentLength = 150; // Giới hạn ký tự
 let giftBags = []; // Mảng để lưu trữ các phần tử túi mù
 let currentGiftContents = []; // Mảng lưu trữ nội dung hiện tại của các túi mù
+let originalColors = []; // Mảng lưu trữ màu gốc của từng túi (ví dụ: 'pink' hoặc 'black')
 
 // Hàm tạo túi mù
-function createGiftBag(index) {
+function createGiftBag(index, initialColorClass) {
     const giftBag = document.createElement('div');
-    giftBag.classList.add('gift-bag');
+    giftBag.classList.add('gift-bag', initialColorClass); // Gán màu ban đầu
     
-    // Gán màu sắc: 5 hồng bên trên, 5 đen bên dưới
-    if (index < 5) {
-        giftBag.classList.add('pink');
-    } else {
-        giftBag.classList.add('black');
-    }
+    // Lưu màu gốc vào dataset của túi để có thể truy xuất sau này
+    giftBag.dataset.originalColor = initialColorClass;
 
-    // Tạo icon túi quà
     const giftIcon = document.createElement('i');
-    giftIcon.classList.add('fas', 'fa-gift'); // Biểu tượng túi quà từ Font Awesome
+    giftIcon.classList.add('fas', 'fa-gift'); 
 
     const label = document.createElement('span');
     label.classList.add('label');
@@ -30,23 +26,26 @@ function createGiftBag(index) {
 
     const textarea = document.createElement('textarea'); 
     textarea.placeholder = 'Ghi điều ước (tối đa 150 ký tự)...';
-    textarea.maxLength = maxContentLength; // Giới hạn ký tự
+    textarea.maxLength = maxContentLength; 
     textarea.addEventListener('click', (event) => {
-        event.stopPropagation(); // Ngăn chặn sự kiện click lan truyền lên giftBag
+        event.stopPropagation(); 
     });
 
     const content = document.createElement('div');
     content.classList.add('content');
 
-    giftBag.appendChild(giftIcon); // Thêm icon vào túi
+    giftBag.appendChild(giftIcon); 
     giftBag.appendChild(label);
     giftBag.appendChild(textarea); 
     giftBag.appendChild(content);
 
     // Xử lý sự kiện click để mở túi mù
     giftBag.addEventListener('click', () => {
-        // Chỉ mở túi nếu đã trộn và túi đó chưa được mở
         if (giftBag.classList.contains('shuffled') && !giftBag.classList.contains('open')) {
+            // Loại bỏ màu vàng và trả về màu gốc
+            giftBag.classList.remove('shuffled-yellow');
+            giftBag.classList.add(giftBag.dataset.originalColor);
+
             // Ẩn tất cả các túi khác và phóng to túi được chọn
             giftBags.forEach(bag => {
                 if (bag !== giftBag) {
@@ -54,7 +53,6 @@ function createGiftBag(index) {
                 }
             });
             giftBag.classList.add('open');
-            // HIỂN THỊ NỘI DUNG TỪ DATASET LÊN PHẦN TỬ CONTENT
             content.textContent = giftBag.dataset.actualContent || 'Trống không!'; 
             content.style.display = 'flex'; 
 
@@ -69,26 +67,36 @@ function createGiftBag(index) {
     return giftBag;
 }
 
-// Khởi tạo các túi mù (chỉ gọi khi cần reset hoàn toàn)
-function initializeGiftBags(contents = []) {
-    giftContainer.innerHTML = ''; // Xóa các túi mù cũ
+// Khởi tạo các túi mù
+function initializeGiftBags(contents = [], colors = []) {
+    giftContainer.innerHTML = ''; 
     giftBags = [];
     currentGiftContents = contents.length ? contents : Array(numberOfGiftBags).fill(''); 
+    
+    // Nếu không có màu được truyền vào (lần đầu tải trang hoặc reset), tạo màu mặc định
+    if (colors.length === 0) {
+        originalColors = Array(numberOfGiftBags).fill('').map((_, i) => (i < 5 ? 'pink' : 'black'));
+    } else {
+        originalColors = colors;
+    }
 
     for (let i = 0; i < numberOfGiftBags; i++) {
-        const giftBag = createGiftBag(i);
+        // Tạo túi với màu gốc từ mảng originalColors
+        const giftBag = createGiftBag(i, originalColors[i]);
         giftBags.push(giftBag);
         giftContainer.appendChild(giftBag);
-        // Gán nội dung đã có (nếu có) vào textarea
+        
         giftBag.querySelector('textarea').value = currentGiftContents[i];
         
-        // Đảm bảo icon, label và textarea hiển thị khi khởi tạo hoặc chỉnh sửa
+        // Đảm bảo icon, label và textarea hiển thị và không có màu vàng
+        giftBag.classList.remove('shuffled-yellow', 'shuffled', 'open', 'hidden');
         giftBag.querySelector('.fa-gift').style.display = 'block';
         giftBag.querySelector('span.label').style.display = 'block';
         giftBag.querySelector('textarea').style.display = 'block';
-        giftBag.querySelector('.content').style.display = 'none'; // Ẩn nội dung đã mở
+        giftBag.querySelector('.content').style.display = 'none'; 
+        giftBag.dataset.actualContent = ''; // Xóa nội dung đã lưu (khi chỉnh sửa)
     }
-    // Thiết lập trạng thái ban đầu của các nút
+    
     shuffleBtn.disabled = false;
     shuffleBtn.style.display = 'block';
     playAgainBtn.style.display = 'none';
@@ -99,7 +107,7 @@ function initializeGiftBags(contents = []) {
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]; // Hoán đổi vị trí
+        [array[i], array[j]] = [array[j], array[i]]; 
     }
 }
 
@@ -110,23 +118,27 @@ shuffleBtn.addEventListener('click', () => {
         currentGiftContents[index] = bag.querySelector('textarea').value; 
     });
     
-    shuffleArray(currentGiftContents); // Trộn ngẫu nhiên nội dung
+    // Trộn cả nội dung và màu gốc (quan trọng!)
+    shuffleArray(currentGiftContents); 
+    shuffleArray(originalColors); // Trộn cả mảng màu gốc
 
-    // Gán nội dung đã trộn vào dataset của từng túi và cập nhật trạng thái
+    // Gán nội dung và màu đã trộn vào dataset của từng túi và cập nhật trạng thái
     giftBags.forEach((bag, index) => {
-        bag.dataset.actualContent = currentGiftContents[index]; // Lưu nội dung đã trộn vào dataset
-        bag.classList.add('shuffled'); // Đánh dấu túi đã được trộn
-        bag.classList.remove('open', 'hidden'); // Đảm bảo túi đang đóng và không bị ẩn
-        
-        bag.querySelector('textarea').readOnly = true; // Khóa textarea
-        bag.querySelector('textarea').style.display = 'none'; // Ẩn textarea
+        bag.dataset.actualContent = currentGiftContents[index]; 
+        bag.dataset.originalColor = originalColors[index]; // Cập nhật màu gốc đã trộn vào dataset
 
-        // Icon và label sẽ được CSS ẩn đi nhờ class .shuffled
-        bag.querySelector('.content').style.display = 'none'; // Ẩn nội dung đã mở
+        bag.classList.add('shuffled', 'shuffled-yellow'); // Thêm class shuffled và shuffled-yellow
+        bag.classList.remove('pink', 'black'); // Loại bỏ màu gốc để màu vàng hiển thị
+        bag.classList.remove('open', 'hidden'); 
+        
+        bag.querySelector('textarea').readOnly = true; 
+        bag.querySelector('textarea').style.display = 'none'; 
+
+        bag.querySelector('.content').style.display = 'none'; 
     });
 
-    shuffleBtn.disabled = true; // Vô hiệu hóa nút trộn sau khi đã trộn
-    editBtn.style.display = 'none'; // Ẩn nút "Chỉnh Sửa" khi đã trộn
+    shuffleBtn.disabled = true; 
+    editBtn.style.display = 'none'; 
 });
 
 // Xử lý nút "Chơi Tiếp"
@@ -134,20 +146,23 @@ playAgainBtn.addEventListener('click', () => {
     // Đặt lại trạng thái tất cả các túi về ban đầu (chưa mở, chưa ẩn)
     giftBags.forEach(bag => {
         bag.classList.remove('open', 'hidden');
-        bag.querySelector('.content').style.display = 'none'; // Đảm bảo nội dung ẩn đi
-
-        // Hiện lại icon và label sau khi chơi xong 1 lượt để có thể chơi tiếp hoặc chỉnh sửa
-        bag.querySelector('.fa-gift').style.display = 'block'; // Hiển thị icon
-        bag.querySelector('span.label').style.display = 'block'; // Hiển thị label
+        bag.querySelector('.content').style.display = 'none'; 
+        
+        // Đảm bảo túi quay lại màu vàng sau khi chơi tiếp một lượt
+        bag.classList.add('shuffled-yellow');
+        bag.classList.remove('pink', 'black'); // Loại bỏ màu gốc nếu có
     });
 
     // Trộn lại các túi mù dựa trên nội dung đã có trong currentGiftContents
-    shuffleArray(currentGiftContents); // Trộn lại nội dung
+    shuffleArray(currentGiftContents); 
+    shuffleArray(originalColors); // Trộn lại cả mảng màu gốc
 
     giftBags.forEach((bag, index) => {
-        bag.dataset.actualContent = currentGiftContents[index]; // Gán lại nội dung đã trộn vào dataset
-        bag.classList.remove('open', 'hidden'); // Đảm bảo túi đang đóng và không ẩn
-        bag.querySelector('.content').style.display = 'none'; // Ẩn nội dung
+        bag.dataset.actualContent = currentGiftContents[index]; 
+        bag.dataset.originalColor = originalColors[index]; // Cập nhật màu gốc đã trộn
+
+        bag.classList.remove('open', 'hidden'); 
+        bag.querySelector('.content').style.display = 'none'; 
     });
 
     playAgainBtn.style.display = 'none';
@@ -156,27 +171,28 @@ playAgainBtn.addEventListener('click', () => {
 
 // Xử lý nút "Chỉnh Sửa"
 editBtn.addEventListener('click', () => {
-    // Thu thập nội dung hiện tại từ các textarea trước khi chỉnh sửa
     const currentInputs = giftBags.map(bag => bag.querySelector('textarea').value);
     
-    // Khởi tạo lại các túi, truyền vào nội dung đã có
-    initializeGiftBags(currentInputs); 
+    // Khi chỉnh sửa, khởi tạo lại túi với nội dung và màu gốc hiện tại (sau khi đã trộn)
+    // Điều này đảm bảo màu được lưu trong originalColors vẫn là màu sau khi trộn.
+    initializeGiftBags(currentInputs, originalColors); 
 
-    // Đảm bảo tất cả các túi quay về trạng thái nhập liệu
     giftBags.forEach(bag => {
-        bag.classList.remove('shuffled', 'open', 'hidden'); // Xóa tất cả trạng thái
-        bag.querySelector('textarea').readOnly = false; // Cho phép chỉnh sửa
-        bag.querySelector('textarea').style.display = 'block'; // Hiện textarea
-        bag.querySelector('span.label').style.display = 'block'; // Hiện label
-        bag.querySelector('.fa-gift').style.display = 'block'; // Hiện icon
-        bag.querySelector('.content').style.display = 'none'; // Ẩn nội dung đã mở
-        bag.dataset.actualContent = ''; // Xóa nội dung đã lưu (vì đang chỉnh sửa)
+        bag.classList.remove('shuffled', 'open', 'hidden', 'shuffled-yellow'); // Xóa tất cả trạng thái
+        bag.classList.add(bag.dataset.originalColor); // Đảm bảo túi về màu gốc ban đầu
+        bag.querySelector('textarea').readOnly = false; 
+        bag.querySelector('textarea').style.display = 'block'; 
+        bag.querySelector('span.label').style.display = 'block'; 
+        bag.querySelector('.fa-gift').style.display = 'block'; 
+        bag.querySelector('.content').style.display = 'none'; 
+        // Không xóa dataset.actualContent hay dataset.originalColor ở đây
+        // vì chúng ta đang muốn giữ lại dữ liệu để chỉnh sửa
     });
     
-    shuffleBtn.disabled = false; // Bật lại nút trộn
-    shuffleBtn.style.display = 'block'; // Hiện nút trộn
-    playAgainBtn.style.display = 'none'; // Ẩn nút chơi tiếp
-    editBtn.style.display = 'block'; // Đảm bảo nút "Chỉnh Sửa" vẫn hiển thị
+    shuffleBtn.disabled = false; 
+    shuffleBtn.style.display = 'block'; 
+    playAgainBtn.style.display = 'none'; 
+    editBtn.style.display = 'block'; 
 });
 
 // Đảm bảo rằng hàm initializeGiftBags() được gọi sau khi toàn bộ DOM đã được tải.
