@@ -42,13 +42,24 @@ h1 {
     100% { transform: scale(1); opacity: 0.8; }
 }
 
+/* Vùng chứa toàn bộ trò chơi */
+.game-area {
+    position: relative; /* Quan trọng: Đặt base cho position: absolute của túi mù mở */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* Giới hạn chiều rộng như gift-container */
+    flex-grow: 1; /* Cho phép nó mở rộng nếu cần */
+    justify-content: center; /* Căn giữa nội dung bên trong theo chiều dọc */
+}
+
 .gift-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* 5 túi trên 1 hàng */
     gap: 20px;
     margin-bottom: 30px;
     width: 100%;
-    max-width: 1200px; /* Giới hạn chiều rộng để tránh quá dài */
     justify-content: center;
     transition: opacity 0.5s ease; /* Hiệu ứng ẩn/hiện */
 }
@@ -63,7 +74,7 @@ h1 {
     align-items: center;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, opacity 0.3s ease, left 0.5s ease, top 0.5s ease; /* Thêm transition cho left/top */
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, opacity 0.3s ease; /* Bỏ left/top khỏi transition của túi thường */
     position: relative; /* Quan trọng để di chuyển vị trí */
     overflow: hidden; /* Ẩn nội dung tràn ra ngoài ban đầu */
     padding: 10px;
@@ -92,25 +103,33 @@ h1 {
 }
 
 .gift-bag.open {
-    /* Các thuộc tính này định vị túi mù vào giữa màn hình và phóng to */
-    position: fixed; /* Quan trọng: Đảm bảo nó tách rời khỏi luồng tài liệu */
+    position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(1.5); /* Kết hợp căn giữa và phóng to */
-    z-index: 100; /* Đảm bảo nó luôn nằm trên các phần tử khác */
+    transform: translate(-50%, -50%) scale(1.5);
+    z-index: 100;
 
-    /* Các thuộc tính khác của túi khi mở */
-    transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
+    opacity: 1; /* Trạng thái cuối cùng là rõ (không mờ) */
+    transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Thêm opacity vào transition */
+
     height: auto;
     max-height: 80vh;
     overflow-y: auto;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Đưa nội dung lên phía trên */
-    align-items: center; /* Vẫn căn giữa theo chiều ngang */
-    padding: 15px; /* Tăng padding để có khoảng trống hợp lý xung quanh nội dung */
+    justify-content: flex-start;
+    align-items: center;
+    padding: 15px;
 }
+
+/* Lớp này định nghĩa trạng thái ban đầu (trong suốt) khi túi được mở */
+.gift-bag.open.fading-in {
+    opacity: 0;
+    /* Bạn có thể thêm một chút thay đổi transform ở đây để tạo hiệu ứng "nổi lên" nhẹ nếu muốn */
+    /* transform: translate(-50%, -50%) scale(1.4); */
+}
+
 
 .gift-bag.hidden {
     opacity: 0;
