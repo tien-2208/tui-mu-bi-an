@@ -11,7 +11,7 @@ let giftData = [];
 let giftBags = []; // Mảng lưu trữ các phần tử DOM của túi mù
 
 // Hàm tạo túi mù
-function createGiftBag(index, initialData) { // Nhận vào toàn bộ dữ liệu ban đầu
+function createGiftBag(index, initialData) { 
     const giftBag = document.createElement('div');
     giftBag.classList.add('gift-bag');
     
@@ -35,12 +35,17 @@ function createGiftBag(index, initialData) { // Nhận vào toàn bộ dữ li�
     textarea.placeholder = 'Ghi điều ước (tối đa 150 ký tự)...';
     textarea.maxLength = maxContentLength; 
     textarea.value = initialData.content; // Đặt giá trị ban đầu cho textarea
+    // Đảm bảo textarea hiển thị khi mới khởi tạo
+    textarea.style.display = 'block'; 
+
     textarea.addEventListener('click', (event) => {
         event.stopPropagation(); 
     });
 
     const content = document.createElement('div');
     content.classList.add('content');
+    // Đảm bảo nội dung ẩn khi mới khởi tạo
+    content.style.display = 'none'; 
 
     giftBag.appendChild(giftIcon); 
     giftBag.appendChild(label);
@@ -62,7 +67,7 @@ function createGiftBag(index, initialData) { // Nhận vào toàn bộ dữ li�
             });
             giftBag.classList.add('open');
             content.textContent = giftBag.dataset.actualContent || 'Trống không!'; 
-            content.style.display = 'flex'; 
+            content.style.display = 'flex'; // Hiển thị nội dung khi mở
 
             playAgainBtn.style.display = 'block';
             shuffleBtn.style.display = 'none';
@@ -100,10 +105,11 @@ function initializeGiftBags(data = []) {
         giftBags.push(giftBag);
         giftContainer.appendChild(giftBag);
         
-        // Đảm bảo icon, label và textarea hiển thị và không có màu vàng
+        // Đảm bảo túi có màu gốc chính xác khi khởi tạo hoặc chỉnh sửa
         giftBag.classList.remove('shuffled-yellow', 'shuffled', 'open', 'hidden');
-        giftBag.classList.add(dataItem.color); // Đảm bảo túi có màu gốc chính xác
+        giftBag.classList.add(dataItem.color); 
         
+        // Đảm bảo icon, label và textarea hiển thị và không có màu vàng
         giftBag.querySelector('.fa-gift').style.display = 'block';
         giftBag.querySelector('span.label').style.display = 'block';
         giftBag.querySelector('textarea').style.display = 'block';
@@ -136,7 +142,7 @@ shuffleBtn.addEventListener('click', () => {
 
     // Cập nhật lại các túi mù dựa trên dữ liệu đã trộn
     giftBags.forEach((bag, index) => {
-        const shuffledItem = giftData[index]; // Lấy dữ liệu đã trộn cho vị trí này
+        const shuffledItem = giftData[index]; 
 
         // Cập nhật dataset của túi DOM
         bag.dataset.actualContent = shuffledItem.content; 
@@ -149,9 +155,9 @@ shuffleBtn.addEventListener('click', () => {
         bag.classList.remove('open', 'hidden'); 
         
         bag.querySelector('textarea').readOnly = true; 
-        bag.querySelector('textarea').style.display = 'none'; 
+        bag.querySelector('textarea').style.display = 'none'; // Ẩn textarea khi trộn
 
-        bag.querySelector('.content').style.display = 'none'; 
+        bag.querySelector('.content').style.display = 'none'; // Đảm bảo nội dung ẩn khi trộn
     });
 
     shuffleBtn.disabled = true; 
@@ -198,7 +204,7 @@ editBtn.addEventListener('click', () => {
         bag.classList.remove('shuffled', 'open', 'hidden', 'shuffled-yellow'); 
         bag.classList.add(bag.dataset.originalColor); // Đảm bảo túi về màu gốc ban đầu
         bag.querySelector('textarea').readOnly = false; 
-        bag.querySelector('textarea').style.display = 'block'; 
+        bag.querySelector('textarea').style.display = 'block'; // Hiển thị textarea khi chỉnh sửa
         bag.querySelector('span.label').style.display = 'block'; 
         bag.querySelector('.fa-gift').style.display = 'block'; 
         bag.querySelector('.content').style.display = 'none'; 
