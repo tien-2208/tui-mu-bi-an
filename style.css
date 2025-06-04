@@ -173,22 +173,6 @@ h1 {
     background-color: #218838;
 }
 
-.controls button#saveDataBtn {
-    background-color: #f0ad4e; /* Màu vàng cam */
-    color: white;
-}
-.controls button#saveDataBtn:hover {
-    background-color: #ec971f;
-}
-
-.controls button#loadDataBtn {
-    background-color: #5bc0de; /* Màu xanh da trời */
-    color: white;
-}
-.controls button#loadDataBtn:hover {
-    background-color: #31b0d5;
-}
-
 /* Responsive adjustments */
 @media (max-width: 900px) {
     .gift-container {
