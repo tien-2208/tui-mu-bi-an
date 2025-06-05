@@ -33,7 +33,7 @@ function createGiftBag(index, initialData) {
     label.textContent = `${initialData.originalIndex + 1}`;
 
     const textarea = document.createElement('textarea');
-    textarea.placeholder = 'Ghi điều ước (tối đa 150 ký tự)...';
+    textarea.placeholder = 'Nội dung (tối đa 150 ký tự)...';
     textarea.maxLength = maxContentLength;
     textarea.value = initialData.content; // Đặt giá trị ban đầu cho textarea
     textarea.style.display = 'block';
