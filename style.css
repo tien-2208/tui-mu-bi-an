@@ -111,7 +111,9 @@ h1 {
 
     transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
     height: auto;
-    max-height: 80vh;
+    max-height: 60vh;
+    width: auto;
+    max-width: 60vh;
     /* Giảm padding để giảm khoảng trống thừa khi mở */
     padding: 10px; /* Giảm từ 15px xuống 10px */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
